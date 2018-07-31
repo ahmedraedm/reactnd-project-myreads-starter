@@ -8,7 +8,6 @@ class SearchBooks extends Component{
             (
                 <div className="search-books">
                   <div className="search-books-bar">
-                    {/* <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a> */}
                     <Link
                         to='/'
                         className='close-search'
@@ -23,7 +22,6 @@ class SearchBooks extends Component{
                         you don't find a specific author or title. Every search is limited by search terms.
                       */}
                       <input type="text" placeholder="Search by title or author"/>
-      
                     </div>
                   </div>
                   <div className="search-books-results">
