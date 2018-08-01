@@ -15,8 +15,8 @@ class ListBooks extends Component {
     }
 
     handleChange = (e) => {
-        var bookId = { id: e.target.id }
-        var bookShelf = e.target.value
+        let bookId = { id: e.target.id }
+        let bookShelf = e.target.value
         if (this.props.onShelfChange) {
             this.props.onShelfChange(bookId, bookShelf)
         }
@@ -41,7 +41,7 @@ class ListBooks extends Component {
                                 <div className="bookshelf-books">
                                     <ol className="books-grid">
                                         {currentlyReadingBooks.map((book) => (
-                                            <li key={book.title}>
+                                            <li key={book.id}>
                                                 <div className="book">
                                                     <div className="book-top">
                                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>

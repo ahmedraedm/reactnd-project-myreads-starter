@@ -10,25 +10,35 @@ class BooksApp extends React.Component {
   constructor() {
     super();
     this.shelfChange = this.shelfChange.bind(this);
-
+    this.searchList = this.searchList.bind(this);
   }
 
   state = {
-    bookss: [],
+    books: [],
+    searchBooks: []
   }
 
   shelfChange(bookId, shelfName) {
     BooksAPI.update(bookId, shelfName).then(() => {
       BooksAPI.getAll().then((Books) => {
-        this.setState({ bookss: Books })
+        this.setState({ books: Books })
       })
+    })
+  }
+
+  searchList(q){
+    // debugger
+    console.log(q)
+    BooksAPI.search(q).then((sBooks) => {
+      // debugger
+      console.log(sBooks)
+      this.setState({ searchBooks: sBooks })
     })
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((Books) => {
-      this.setState({ bookss: Books })
-      //  console.log(this.state.books)
+      this.setState({ books: Books })
     })
   }
 
@@ -37,13 +47,16 @@ class BooksApp extends React.Component {
       <div>
         <Route exact path='/' render={() => (
           <ListBooks
-            books={this.state.bookss}
+            books={this.state.books}
             onShelfChange={this.shelfChange}
           />
         )} />
 
         <Route exact path='/search' render={() => (
-          <SearchBooks />
+          <SearchBooks 
+            searchBooks={this.state.searchBooks}
+            sBooksList = {this.searchList}
+          />
         )} />
       </div>
     )
