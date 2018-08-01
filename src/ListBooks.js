@@ -1,23 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
+import * as BooksAPI from './BooksAPI'
 
 class ListBooks extends Component {
-    state = {
-        showSearchPage: false
+
+    constructor() {
+        super();
+        this.handleChange = this.handleChange.bind(this);
     }
+
+    state = {
+        // showSearchPage: false
+    }
+
+    handleChange = (e) => {
+        var bookId = { id: e.target.id }
+        var bookShelf = e.target.value
+        if (this.props.onShelfChange) {
+            this.props.onShelfChange(bookId, bookShelf)
+        }
+    }
+
     render() {
-        // console.log(this.props.books)
-        
         let currentlyReadingBooks, wantToReadBooks, readBooks
-        currentlyReadingBooks = this.props.books.filter(book => book.shelf.value === 'currentlyReading')
+        currentlyReadingBooks = this.props.books.filter(book => book.shelf === 'currentlyReading')
         wantToReadBooks = this.props.books.filter(book => book.shelf === 'wantToRead')
         readBooks = this.props.books.filter(book => book.shelf === 'read')
-
-        console.log(currentlyReadingBooks)
-        console.log(wantToReadBooks)
-        console.log(readBooks)
-        
 
         return (
             <div className="app">
@@ -37,7 +46,7 @@ class ListBooks extends Component {
                                                     <div className="book-top">
                                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                                                         <div className="book-shelf-changer">
-                                                            <select value={book.shelf}>
+                                                            <select value={book.shelf} id={book.id} onChange={this.handleChange}>
                                                                 <option value="move" disabled>Move to...</option>
                                                                 <option value="currentlyReading">Currently Reading</option>
                                                                 <option value="wantToRead">Want to Read</option>
@@ -58,13 +67,13 @@ class ListBooks extends Component {
                                 <h2 className="bookshelf-title">Want to Read</h2>
                                 <div className="bookshelf-books">
                                     <ol className="books-grid">
-                                    {wantToReadBooks.map((book) => (
+                                        {wantToReadBooks.map((book) => (
                                             <li key={book.title}>
                                                 <div className="book">
                                                     <div className="book-top">
-                                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})`}}></div>
+                                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                                                         <div className="book-shelf-changer">
-                                                            <select value={book.shelf}>
+                                                            <select value={book.shelf} id={book.id} onChange={this.handleChange}>
                                                                 <option value="move" disabled>Move to...</option>
                                                                 <option value="currentlyReading">Currently Reading</option>
                                                                 <option value="wantToRead" >Want to Read</option>
@@ -85,13 +94,13 @@ class ListBooks extends Component {
                                 <h2 className="bookshelf-title">Read</h2>
                                 <div className="bookshelf-books">
                                     <ol className="books-grid">
-                                    {readBooks.map((book) => (
+                                        {readBooks.map((book) => (
                                             <li key={book.title}>
                                                 <div className="book">
                                                     <div className="book-top">
                                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                                                         <div className="book-shelf-changer">
-                                                            <select value={book.shelf}>
+                                                            <select value={book.shelf} id={book.id} onChange={this.handleChange}>
                                                                 <option value="move" disabled>Move to...</option>
                                                                 <option value="currentlyReading">Currently Reading</option>
                                                                 <option value="wantToRead">Want to Read</option>

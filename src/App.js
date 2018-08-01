@@ -6,22 +6,39 @@ import './App.css'
 import SearchBooks from './SearchBooks';
 
 class BooksApp extends React.Component {
+
+  constructor() {
+    super();
+    this.shelfChange = this.shelfChange.bind(this);
+
+  }
+
   state = {
-    books:[]
+    bookss: [],
+  }
+
+  shelfChange(bookId, shelfName) {
+    BooksAPI.update(bookId, shelfName).then(() => {
+      BooksAPI.getAll().then((Books) => {
+        this.setState({ bookss: Books })
+      })
+    })
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((Books) => {
-      this.setState({ books: Books })
+      this.setState({ bookss: Books })
       //  console.log(this.state.books)
-    })}
+    })
+  }
 
   render() {
     return (
       <div>
         <Route exact path='/' render={() => (
-          <ListBooks 
-            books={this.state.books}
+          <ListBooks
+            books={this.state.bookss}
+            onShelfChange={this.shelfChange}
           />
         )} />
 
