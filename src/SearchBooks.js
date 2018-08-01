@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
 
 
 class SearchBooks extends Component {
+
+    static propTypes = {
+        sBooksList: PropTypes.func.isRequired,
+        onShelfChange: PropTypes.func.isRequired,
+        searchBooks: PropTypes.array.isRequired,
+        booksOnShlefId: PropTypes.array.isRequired
+        }
 
     state = {
         query: '',
         keyWords: ['Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality', 'Web Development', 'iOS'],
         matchedBooks: false
+    }
+
+    handleChange = (e) => {
+        debugger
+        let bookId = { id: e.target.id }
+        let bookShelf = e.target.value
+        if (this.props.onShelfChange) {
+            this.props.onShelfChange(bookId, bookShelf)
+        }
     }
     
     updateQuery = (query) => {
@@ -33,7 +48,7 @@ class SearchBooks extends Component {
 
     render() {
         let booksList = this.props.searchBooks
-        // debugger
+        debugger
         return (
             (
                 <div className="search-books">
@@ -63,17 +78,18 @@ class SearchBooks extends Component {
                         {this.state.matchedBooks ?
                             (<ol className="books-grid">
                                 {booksList.map((book) => (
+                                    (!this.props.booksOnShlefId.includes(book.id)?
                                     <li key={book.id}>
                                         <div className="book">
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select value={book.shelf} id={book.id} onChange={this.handleChange}>
+                                                    <select id={book.id} onChange={this.handleChange}>
                                                         <option value="move" disabled>Move to...</option>
                                                         <option value="currentlyReading">Currently Reading</option>
                                                         <option value="wantToRead">Want to Read</option>
                                                         <option value="read">Read</option>
-                                                        <option value="none">None</option>
+                                                        <option value="none" selected="selected">None</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -81,6 +97,7 @@ class SearchBooks extends Component {
                                             <div className="book-authors">{book.authors}</div>
                                         </div>
                                     </li>
+                                    :'')
                                 ))}
                             </ol>) : ''}
                     </div>

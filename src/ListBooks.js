@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
 
 class ListBooks extends Component {
 
@@ -9,6 +8,11 @@ class ListBooks extends Component {
         super();
         this.handleChange = this.handleChange.bind(this);
     }
+
+    static propTypes = {
+        onShelfChange: PropTypes.func.isRequired,
+        books: PropTypes.array.isRequired
+        }
 
     state = {
         // showSearchPage: false

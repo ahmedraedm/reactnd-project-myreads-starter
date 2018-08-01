@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ListBooks from './ListBooks'
 import { Route } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
@@ -11,35 +11,66 @@ class BooksApp extends React.Component {
     super();
     this.shelfChange = this.shelfChange.bind(this);
     this.searchList = this.searchList.bind(this);
+    this.booksOnShelfId = this.booksOnShelfId.bind(this)
   }
 
   state = {
     books: [],
-    searchBooks: []
+    searchBooks: [],
+    allBooksOnShelfId: []
   }
 
   shelfChange(bookId, shelfName) {
+    debugger
     BooksAPI.update(bookId, shelfName).then(() => {
       BooksAPI.getAll().then((Books) => {
         this.setState({ books: Books })
+      }).then(() => {
+         this.booksOnShelfId()
       })
     })
   }
 
-  searchList(q){
-    // debugger
+  // addToNewShelf(bookId, shelfName){
+
+  // }
+
+  searchList(q) {
+    debugger
     console.log(q)
     BooksAPI.search(q).then((sBooks) => {
-      // debugger
-      console.log(sBooks)
+      // this.state.books.map(function (bookOnShelve) {
+      //   debugger
+      //   sBooks.map(function(item){
+      //     if (item.id===bookOnShelve.id) {
+      //     }
+      //   })
+      //     debugger
+      //   console.log(sBooks)
+      // })
       this.setState({ searchBooks: sBooks })
+
     })
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((Books) => {
       this.setState({ books: Books })
+      debugger
+    }).then(()=>{
+      this.booksOnShelfId()
     })
+
+  }
+
+  booksOnShelfId(){
+    let booksId=[]
+    this.state.books.map(function(book){
+      debugger
+      // console.log(book.id)
+      return booksId.push(book.id)
+    })
+    this.setState({allBooksOnShelfId: booksId})    
   }
 
   render() {
@@ -53,9 +84,12 @@ class BooksApp extends React.Component {
         )} />
 
         <Route exact path='/search' render={() => (
-          <SearchBooks 
+          <SearchBooks
             searchBooks={this.state.searchBooks}
-            sBooksList = {this.searchList}
+            sBooksList={this.searchList}
+            booksOnShlefId = {this.state.allBooksOnShelfId}
+            onShelfChange={this.shelfChange}
+            
           />
         )} />
       </div>
