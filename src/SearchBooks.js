@@ -19,7 +19,7 @@ class SearchBooks extends Component {
     }
 
     handleChange = (e) => {
-        debugger
+        // debugger
         let bookId = { id: e.target.id }
         let bookShelf = e.target.value
         if (this.props.onShelfChange) {
@@ -48,7 +48,7 @@ class SearchBooks extends Component {
 
     render() {
         let booksList = this.props.searchBooks
-        debugger
+        // debugger
         return (
             (
                 <div className="search-books">
@@ -84,12 +84,12 @@ class SearchBooks extends Component {
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select id={book.id} onChange={this.handleChange}>
+                                                    <select defaultValue='none' id={book.id} onChange={this.handleChange}>
                                                         <option value="move" disabled>Move to...</option>
                                                         <option value="currentlyReading">Currently Reading</option>
                                                         <option value="wantToRead">Want to Read</option>
                                                         <option value="read">Read</option>
-                                                        <option value="none" selected="selected">None</option>
+                                                        <option value="none">None</option>
                                                     </select>
                                                 </div>
                                             </div>

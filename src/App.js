@@ -21,7 +21,7 @@ class BooksApp extends React.Component {
   }
 
   shelfChange(bookId, shelfName) {
-    debugger
+    // debugger
     BooksAPI.update(bookId, shelfName).then(() => {
       BooksAPI.getAll().then((Books) => {
         this.setState({ books: Books })
@@ -31,23 +31,10 @@ class BooksApp extends React.Component {
     })
   }
 
-  // addToNewShelf(bookId, shelfName){
-
-  // }
-
   searchList(q) {
-    debugger
+    // debugger
     console.log(q)
     BooksAPI.search(q).then((sBooks) => {
-      // this.state.books.map(function (bookOnShelve) {
-      //   debugger
-      //   sBooks.map(function(item){
-      //     if (item.id===bookOnShelve.id) {
-      //     }
-      //   })
-      //     debugger
-      //   console.log(sBooks)
-      // })
       this.setState({ searchBooks: sBooks })
 
     })
@@ -56,7 +43,7 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll().then((Books) => {
       this.setState({ books: Books })
-      debugger
+      // debugger
     }).then(()=>{
       this.booksOnShelfId()
     })
@@ -66,8 +53,7 @@ class BooksApp extends React.Component {
   booksOnShelfId(){
     let booksId=[]
     this.state.books.map(function(book){
-      debugger
-      // console.log(book.id)
+      // debugger
       return booksId.push(book.id)
     })
     this.setState({allBooksOnShelfId: booksId})    
