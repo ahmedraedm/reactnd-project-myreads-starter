@@ -26,54 +26,58 @@ class BooksApp extends React.Component {
       BooksAPI.getAll().then((Books) => {
         this.setState({ books: Books })
       }).then(() => {
-         this.booksOnShelfId()
+        this.booksOnShelfId()
       })
     })
   }
 
   searchList(q) {
     // debugger
-    var booksArray=[]
+    var booksArray = []
     console.log(q)
-    q.map(function(query) {
-      if (query!=='') {
+    q.map(function (query) {
+      if (query !== '') {
         return BooksAPI.search(query).then((sBooks) => {
-          sBooks.map(function(book) {
-            return booksArray.push(book)
+          sBooks.map(function (book) {
+            if (book.imageLinks) {
+              if (book.imageLinks.smallThumbnail) {
+                return booksArray.push(book)
+              }
+            }
             //  debugger
           }.bind(this))
-        }).then(()=>{
+        }).then(() => {
           // debugger
           this.setState({ searchBooks: booksArray })
-        }).catch(function() {
-          alert('Please type letters only')
+        }).catch(function () {
+          //do nothing
         })
       }
-      
+
     }.bind(this))
-    
+
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((Books) => {
       this.setState({ books: Books })
       // debugger
-    }).then(()=>{
-      debugger
+    }).then(() => {
+      // debugger
       this.booksOnShelfId()
     })
 
   }
 
-  booksOnShelfId(){
-    let booksId=[]
-    this.state.books.map(function(book){
+  booksOnShelfId() {
+    let booksId = []
+    this.state.books.map(function (book) {
       // debugger
       return booksId.push(book.id)
     })
     console.log(this)
-    
-    this.setState({allBooksOnShelfId: booksId})    
+
+    this.setState({ allBooksOnShelfId: booksId })
   }
 
   render() {
@@ -90,9 +94,9 @@ class BooksApp extends React.Component {
           <SearchBooks
             searchBooks={this.state.searchBooks}
             sBooksList={this.searchList}
-            booksOnShlefId = {this.state.allBooksOnShelfId}
+            booksOnShlefId={this.state.allBooksOnShelfId}
             onShelfChange={this.shelfChange}
-            
+
           />
         )} />
       </div>
