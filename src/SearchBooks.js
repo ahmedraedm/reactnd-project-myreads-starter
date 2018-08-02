@@ -9,7 +9,8 @@ class SearchBooks extends Component {
         sBooksList: PropTypes.func.isRequired,
         onShelfChange: PropTypes.func.isRequired,
         searchBooks: PropTypes.array.isRequired,
-        booksOnShlefId: PropTypes.array.isRequired
+        booksOnShlefId: PropTypes.array.isRequired,
+        books: PropTypes.array.isRequired
     }
 
     state = {
@@ -34,7 +35,6 @@ class SearchBooks extends Component {
         let queryArray = []
         var RegExpression = /^[a-zA-Z\s]*$/;
         if (RegExpression.test(queryString)) {
-            console.log(queryString)
             singleBook = queryString.split(" ");
             for (var i = 0; i < singleBook.length; i++) {
                 queryArray.push(singleBook[i]);
@@ -58,6 +58,7 @@ class SearchBooks extends Component {
 
     render() {
         let booksList = this.props.searchBooks
+        let bookMatch = []
         // debugger
         return (
             (
@@ -107,7 +108,26 @@ class SearchBooks extends Component {
                                                 <div className="book-authors">{book.authors}</div>
                                             </div>
                                         </li>
-                                        : '')
+                                        :
+                                        <li key={book.id}>
+                                            <div className="book">
+                                                <div className="book-top">
+                                                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
+                                                    <div className="book-shelf-changer">
+                                                        <select value={(this.props.books.filter(bookOnShelf => bookOnShelf.id === book.id).map(matchedBook => matchedBook.shelf))} id={book.id} onChange={this.handleChange}>
+                                                            <option value="move" disabled>Move to...</option>
+                                                            <option value="currentlyReading">Currently Reading</option>
+                                                            <option value="wantToRead">Want to Read</option>
+                                                            <option value="read">Read</option>
+                                                            <option value="none">None</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="book-title">{book.title}</div>
+                                                <div className="book-authors">{book.authors}</div>
+                                            </div>
+                                        </li>
+                                    )
                                 ))}
                             </ol>) : ''}
                     </div>

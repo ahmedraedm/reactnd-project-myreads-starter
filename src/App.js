@@ -25,7 +25,8 @@ class BooksApp extends React.Component {
     BooksAPI.update(bookId, shelfName).then(() => {
       BooksAPI.getAll().then((Books) => {
         this.setState({ books: Books })
-      }).then(() => {
+      })
+      .then(() => {
         this.booksOnShelfId()
       })
     })
@@ -34,13 +35,13 @@ class BooksApp extends React.Component {
   searchList(q) {
     // debugger
     var booksArray = []
-    console.log(q)
     q.map(function (query) {
       if (query !== '') {
         return BooksAPI.search(query).then((sBooks) => {
           sBooks.map(function (book) {
-            if (book.imageLinks) {
-              if (book.imageLinks.smallThumbnail) {
+            // debugger
+            if (book.imageLinks && book.authors) {
+              if (book.imageLinks.smallThumbnail && book.authors.length>0) {
                 return booksArray.push(book)
               }
             }
@@ -49,9 +50,10 @@ class BooksApp extends React.Component {
         }).then(() => {
           // debugger
           this.setState({ searchBooks: booksArray })
-        }).catch(function () {
-          //do nothing
         })
+        // .catch(function () {
+        //   //do nothing
+        // })
       }
 
     }.bind(this))
@@ -62,7 +64,8 @@ class BooksApp extends React.Component {
     BooksAPI.getAll().then((Books) => {
       this.setState({ books: Books })
       // debugger
-    }).then(() => {
+    })
+    .then(() => {
       // debugger
       this.booksOnShelfId()
     })
@@ -75,8 +78,6 @@ class BooksApp extends React.Component {
       // debugger
       return booksId.push(book.id)
     })
-    console.log(this)
-
     this.setState({ allBooksOnShelfId: booksId })
   }
 
@@ -96,6 +97,7 @@ class BooksApp extends React.Component {
             sBooksList={this.searchList}
             booksOnShlefId={this.state.allBooksOnShelfId}
             onShelfChange={this.shelfChange}
+            books={this.state.books}
 
           />
         )} />
