@@ -33,26 +33,29 @@ class BooksApp extends React.Component {
   }
 
   searchList(q) {
-    // debugger
+    debugger
     var booksArray = []
     q.map(function (query) {
       if (query !== '') {
         return BooksAPI.search(query).then((sBooks) => {
-          sBooks.map(function (book) {
-            // debugger
-            if (book.imageLinks && book.authors) {
-              if (book.imageLinks.smallThumbnail && book.authors.length>0) {
-                return booksArray.push(book)
+          debugger
+          if (sBooks.length>0) {
+            sBooks.map(function (book) {
+              // debugger
+              if (book.imageLinks && book.authors) {
+                if (book.imageLinks.smallThumbnail && book.authors.length>0) {
+                  return booksArray.push(book)
+                }
               }
-            }
-            //  debugger
-          }.bind(this))
+              //  debugger
+            }.bind(this))
+          }
         }).then(() => {
           // debugger
           this.setState({ searchBooks: booksArray })
         })
         // .catch(function () {
-        //   //do nothing
+          //do nothing
         // })
       }
 
