@@ -29,7 +29,7 @@ The main page also has a link to a _SEARCH_ page, it allows you to find books to
 
 ### Search page
 
-The search page has a text input that may be used to find books. As the value of the text input changes, the books that match that query are displayed on the page, along with a control that lets you add the book to your library. The search page also has a link to / (the root URL), which leads back to the main page.
+The search page has a text input that may be used to find books. As the value of the text input changes, the books that match that query are displayed on the page, along with a control that lets you add the book to your library. The search page also has a link button that navigates you back to the main page.
 
 When you navigate back to the main page from the search page, all of the selections you made on the search page are moved to your library.
 
