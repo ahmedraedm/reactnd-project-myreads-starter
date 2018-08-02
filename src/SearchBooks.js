@@ -10,11 +10,12 @@ class SearchBooks extends Component {
         onShelfChange: PropTypes.func.isRequired,
         searchBooks: PropTypes.array.isRequired,
         booksOnShlefId: PropTypes.array.isRequired
-        }
+    }
 
     state = {
         query: '',
-        keyWords: ['Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality', 'Web Development', 'iOS'],
+        queryBefore: '',
+        queryArray: [],
         matchedBooks: false
     }
 
@@ -26,24 +27,33 @@ class SearchBooks extends Component {
             this.props.onShelfChange(bookId, bookShelf)
         }
     }
-    
-    updateQuery = (query) => {
-        // debugger
-        console.log(query)
-        this.setState({ query: query.trim() })
-        if (this.state.keyWords.includes(query.toLowerCase().trim())) {
-            this.props.sBooksList(query)
-            this.setState({matchedBooks: true})
-        }else{
-            this.setState({matchedBooks: false})
-        }
-    }
 
-    componentDidMount() {
-        let lowerCaseKeyWords = this.state.keyWords.map(function(value) {
-            return value.toLowerCase();
-          });
-          this.setState({keyWords: lowerCaseKeyWords})
+    updateQuery = (queryString) => {
+        // debugger
+        let singleBook = []
+        let queryArray = []
+        var RegExpression = /^[a-zA-Z\s]*$/;
+        if (RegExpression.test(queryString)) {
+            console.log(queryString)
+            singleBook = queryString.split(" ");
+            for (var i = 0; i < singleBook.length; i++) {
+                queryArray.push(singleBook[i]);
+            }
+            this.setState({ query: queryString })
+            this.setState({ queryBefore: queryString })
+            this.setState({ queryArray: queryArray })
+
+            if (queryString.trim()) {
+                this.props.sBooksList(queryArray)
+                this.setState({ matchedBooks: true })
+            } else {
+                this.setState({ matchedBooks: false })
+            }
+        } else {
+            alert('Please type letters or spaces only')
+            this.setState({ query: this.state.queryBefore })
+        }
+
     }
 
     render() {
@@ -78,26 +88,26 @@ class SearchBooks extends Component {
                         {this.state.matchedBooks ?
                             (<ol className="books-grid">
                                 {booksList.map((book) => (
-                                    (!this.props.booksOnShlefId.includes(book.id)?
-                                    <li key={book.id}>
-                                        <div className="book">
-                                            <div className="book-top">
-                                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
-                                                <div className="book-shelf-changer">
-                                                    <select defaultValue='none' id={book.id} onChange={this.handleChange}>
-                                                        <option value="move" disabled>Move to...</option>
-                                                        <option value="currentlyReading">Currently Reading</option>
-                                                        <option value="wantToRead">Want to Read</option>
-                                                        <option value="read">Read</option>
-                                                        <option value="none">None</option>
-                                                    </select>
+                                    (!this.props.booksOnShlefId.includes(book.id) ?
+                                        <li key={book.id}>
+                                            <div className="book">
+                                                <div className="book-top">
+                                                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
+                                                    <div className="book-shelf-changer">
+                                                        <select defaultValue='none' id={book.id} onChange={this.handleChange}>
+                                                            <option value="move" disabled>Move to...</option>
+                                                            <option value="currentlyReading">Currently Reading</option>
+                                                            <option value="wantToRead">Want to Read</option>
+                                                            <option value="read">Read</option>
+                                                            <option value="none">None</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
+                                                <div className="book-title">{book.title}</div>
+                                                <div className="book-authors">{book.authors}</div>
                                             </div>
-                                            <div className="book-title">{book.title}</div>
-                                            <div className="book-authors">{book.authors}</div>
-                                        </div>
-                                    </li>
-                                    :'')
+                                        </li>
+                                        : '')
                                 ))}
                             </ol>) : ''}
                     </div>

@@ -33,11 +33,25 @@ class BooksApp extends React.Component {
 
   searchList(q) {
     // debugger
+    var booksArray=[]
     console.log(q)
-    BooksAPI.search(q).then((sBooks) => {
-      this.setState({ searchBooks: sBooks })
-
-    })
+    q.map(function(query) {
+      if (query!=='') {
+        return BooksAPI.search(query).then((sBooks) => {
+          sBooks.map(function(book) {
+            return booksArray.push(book)
+            //  debugger
+          }.bind(this))
+        }).then(()=>{
+          // debugger
+          this.setState({ searchBooks: booksArray })
+        }).catch(function() {
+          alert('Please type letters only')
+        })
+      }
+      
+    }.bind(this))
+    
   }
 
   componentDidMount() {
@@ -45,6 +59,7 @@ class BooksApp extends React.Component {
       this.setState({ books: Books })
       // debugger
     }).then(()=>{
+      debugger
       this.booksOnShelfId()
     })
 
@@ -56,6 +71,8 @@ class BooksApp extends React.Component {
       // debugger
       return booksId.push(book.id)
     })
+    console.log(this)
+    
     this.setState({allBooksOnShelfId: booksId})    
   }
 
